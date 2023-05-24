@@ -22,43 +22,45 @@ const contentStyle = {
   width: 800
 };
 
-const columns = [
-
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: 'Price',
-    dataIndex: 'price',
-    key: 'price',
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
-
-const ProductList = () => {
+const ProductList = (props) => {
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
 
+  const openProductModal = (record) => {
+    console.log(record);
+  }
 
+  const columns = [
+
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <ProductFormModal product={record} modalName='Edit'></ProductFormModal>
+          <a>Delete</a>
+        </Space >
+      ),
+    },
+  ];
 
   useEffect(() => {
     getAllProducts(1);
@@ -77,7 +79,7 @@ const ProductList = () => {
     <Space style={{ width: '100%', justifyContent: 'left' }}>
       <Content style={contentStyle}>
 
-        <ProductFormModal></ProductFormModal>
+        <ProductFormModal modalName='Add'></ProductFormModal>
         <Title level="3" >Products</Title>
 
         <Table

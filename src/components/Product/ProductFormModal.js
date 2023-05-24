@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import ProductForm from './ProductForm';
 
-const ProductFormModal = () => {
+const ProductFormModal = (props) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Add Product');
+  const [modalText, setModalText] = useState(props.modalName);
   const showModal = () => {
     setOpen(true);
   };
@@ -31,7 +31,7 @@ const ProductFormModal = () => {
         footer={null}
         onCancel={handleCancel}
       >
-        <ProductForm closeModelCallback={handleCancel}></ProductForm>
+        <ProductForm product={props.product} modalName={props.modalName} closeModelCallback={handleCancel}></ProductForm>
       </Modal>
     </>
   );

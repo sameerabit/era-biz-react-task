@@ -7,21 +7,40 @@ import {
     Button,
     message,
     Upload,
-    Alert
+    Alert,
+    Image
 } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { productService } from '../../services/productService';
 
 
 const ProductForm = (props) => {
-
+    const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const [imageSrc, setImageSrc] = useState('');
     const [displayAlert, setDisplayAlert] = useState({
         type: null,
         message: null,
         visible: false
     });
+    const [product, setProduct] = useState({
+        id: null,
+        name: null,
+        description: null,
+        price: null
+    })
+
+    if (props.modalName == "Edit") {
+        useEffect(() => {
+            form.setFieldsValue(props.product);
+            productService.getProductImage(props.product.id).then((data) => {
+                setImageSrc(data);
+            });
+        }, []);
+
+
+    }
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -53,7 +72,6 @@ const ProductForm = (props) => {
         return e.fileList;
     };
 
-
     return (
 
         <Form
@@ -67,7 +85,7 @@ const ProductForm = (props) => {
             style={{
                 maxWidth: 600,
             }}
-
+            form={form}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -116,6 +134,7 @@ const ProductForm = (props) => {
                     },
                 ]}
             >
+
                 <Upload
                     listType="picture"
                     accept="image/png, image/jpeg"
@@ -125,6 +144,10 @@ const ProductForm = (props) => {
                     <Button icon={<UploadOutlined />}>Upload</Button>
                 </Upload>
             </Form.Item>
+            <Image
+                width={200}
+                src={imageSrc}
+            />
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={loading}>
                     Save

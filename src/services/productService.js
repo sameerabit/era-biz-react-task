@@ -35,6 +35,19 @@ export const productService = {
             {},
             header
         );
+    },
+
+    getProductImage: (id) => {
+
+        let header = {
+            'Authorization': 'Bearer ' + Cookies.get("authToken")
+        }
+        return webService.call(
+            'get',
+            `products/${id}/image`,
+            {},
+            header
+        );
     }
 
 }
