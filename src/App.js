@@ -20,7 +20,7 @@ const App: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{height:"100vh"}}>
+    <Layout style={{ height: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
@@ -67,9 +67,9 @@ const App: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-          
+
           <LoginForm></LoginForm>
-          <ProductList></ProductList>
+          {/* <ProductList></ProductList> */}
         </Content>
       </Layout>
     </Layout>

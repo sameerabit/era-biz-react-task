@@ -10,7 +10,6 @@ const ProductFormModal = () => {
     setOpen(true);
   };
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -24,16 +23,15 @@ const ProductFormModal = () => {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Add Product
+        {modalText}
       </Button>
       <Modal
-        title="Title"
+        title={modalText}
         open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
+        footer={null}
         onCancel={handleCancel}
       >
-        <ProductForm></ProductForm>
+        <ProductForm closeModelCallback={handleCancel}></ProductForm>
       </Modal>
     </>
   );
