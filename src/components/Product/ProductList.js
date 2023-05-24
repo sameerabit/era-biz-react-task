@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './index.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Table, Tag } from 'antd';
@@ -7,20 +7,13 @@ import { Layout, Space } from 'antd';
 
 import { Typography } from 'antd';
 import ProductFormModal from './ProductFormModal';
-
-interface DataType {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-  }
+import { productService } from '../../services/productService';
 
 const { Title } = Typography;
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 
-const contentStyle: React.CSSProperties = {
+const contentStyle = {
   textAlign: 'left',
   minHeight: 120,
   lineHeight: '120px',
@@ -29,97 +22,81 @@ const contentStyle: React.CSSProperties = {
   width: 800
 };
 
-const columns: ColumnsType<DataType> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-  ];
+const columns = [
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title: 'Price',
+    dataIndex: 'price',
+    key: 'price',
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_, record) => (
+      <Space size="middle">
+        <a>Invite {record.name}</a>
+        <a>Delete</a>
+      </Space>
+    ),
+  },
+];
 
-const ProductList: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
-  };
+const ProductList = () => {
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+
+
+
+  useEffect(() => {
+    getAllProducts(1);
+  }, []);
+
+  const getAllProducts = async (page) => {
+    setLoading(true);
+    productService.getAll(page).then((response) => {
+      setProducts(response.data);
+      setTotalPages(response.meta.total);
+      setLoading(false);
+    });
+  }
 
   return (
-    <Space style={{width: '100%', justifyContent: 'left'}}>
+    <Space style={{ width: '100%', justifyContent: 'left' }}>
       <Content style={contentStyle}>
-    
+
         <ProductFormModal></ProductFormModal>
-      <Title level="3" >Products</Title>
-      
-      <Table columns={columns} dataSource={data} />;
+        <Title level="3" >Products</Title>
+
+        <Table
+          columns={columns}
+          dataSource={products}
+          loading={loading}
+          pagination={{
+            pageSize: 10,
+            total: totalPages,
+            onChange: (page) => {
+              getAllProducts(page)
+            }
+          }}
+        />;
 
       </Content>
-  </Space>
-    
+    </Space>
+
   );
 };
 
-export default ProductList;
+export default ProductList

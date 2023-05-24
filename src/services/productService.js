@@ -1,4 +1,8 @@
 import { webService } from './webService';
+import { BACKEND_URL } from "../constants";
+import Cookies from "js-cookie";
+
+
 
 export const productService = {
 
@@ -9,12 +13,26 @@ export const productService = {
 
         let header = {
             'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer 3|tV0N8y5ifCHfwFJTiVZWO7BPn6nFIfMtAfTRBx42'
+            'Authorization': 'Bearer ' + Cookies.get("authToken")
         }
         return webService.call(
             'post',
             'http://localhost:8080/api/v1/products',
             values,
+            header
+        );
+    },
+
+    getAll: (page) => {
+        // use constant for configs
+
+        let header = {
+            'Authorization': 'Bearer ' + Cookies.get("authToken")
+        }
+        return webService.call(
+            'get',
+            'products?page=' + page,
+            {},
             header
         );
     }

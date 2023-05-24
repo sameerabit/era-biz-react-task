@@ -9,10 +9,12 @@ export const loginService = {
         }
         return webService.call(
             'post',
-            'http://localhost:8080/api/v1/login',
+            'login',
             values,
             header
         );
+
+
     }
 
 }

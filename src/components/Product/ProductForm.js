@@ -108,7 +108,7 @@ const ProductForm = (props) => {
                 name="image"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
-                extra="longgggggggggggggggggggggggggggggggggg"
+                extra="max 2048MB"
                 rules={[
                     {
                         required: true,
