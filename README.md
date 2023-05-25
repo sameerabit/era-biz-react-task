@@ -1,6 +1,25 @@
-# Getting Started with Create React App
+# Era Biz React Task
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend web application using react to connect with [https://github.com/sameerabit/era-biz-laravel-task](Laravel Backend)
+
+## Techstack
+
+1. React JS
+2. Redux
+3. Used antd for designing. (https://ant.design/)
+4. CSS (Looking forward to apply SCSS)
+
+## Dependencies
+
+Node v19.8.1
+yarn 1.22.19
+
+## How to use
+
+1. Clone the code from this repo
+2. `cd <Project Directory>`
+3. `yarn install`
+4. `yarn start`
 
 ## Available Scripts
 
