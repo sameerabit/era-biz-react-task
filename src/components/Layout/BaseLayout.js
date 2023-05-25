@@ -66,7 +66,7 @@ const BaseLayout = (props) => {
                     textAlign: 'center',
                 }}
             >
-                Ant Design ©2023 Created by Ant UED
+                Ant Design ©2023 Created by SapienCoder &copy; Viraj
             </Footer>
         </Layout>
     );
