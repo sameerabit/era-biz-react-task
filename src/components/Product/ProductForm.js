@@ -6,11 +6,15 @@ import {
     Button,
     Upload,
     Alert,
-    Image
+    Image,
+    message
 } from 'antd';
 import { useState, useEffect } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { productService } from '../../services/productService';
+import Cookies from "js-cookie";
+import ReactRecaptcha3 from 'react-google-recaptcha3';
+import { CONFIG } from '../../constants';
 
 
 const ProductForm = (props) => {
@@ -22,6 +26,7 @@ const ProductForm = (props) => {
         message: null,
         visible: false
     });
+    const [fileList, setFileList] = useState({});
 
     if (props.modalName === "Edit") {
         useEffect(() => {
@@ -30,11 +35,15 @@ const ProductForm = (props) => {
                 setImageSrc(data);
             });
         }, []);
-
-
     }
 
-    const onFinish = async (values) => {
+    useEffect(() => {
+        ReactRecaptcha3.init(CONFIG.RECAPTCHA_KEY).then(
+            (status) => status
+        );
+    }, [])
+
+    const save = async (values) => {
         setLoading(true);
         try {
             let savedProductResponse = await productService.saveProduct(values);
@@ -50,14 +59,64 @@ const ProductForm = (props) => {
             });
             setLoading(false);
         }
+    }
+
+    const handleUpload = async (data) => {
+        if (props.modalName != 'Edit') {
+            return false;
+        }
+        try {
+            let values = {
+                image: data
+            }
+            let savedProductResponse = await productService.uploadImage(values, props.product.id);
+            if (savedProductResponse.id) {
+                props.closeModelCallback();
+                setLoading(false);
+            }
+        } catch (err) {
+            setDisplayAlert({
+                type: 'error',
+                message: err.response.data.message,
+                visible: true
+            });
+            setLoading(false);
+        }
+    }
+
+    const update = async (values) => {
+        setLoading(true);
+        try {
+            values.id = props.product.id;
+            let savedProductResponse = await productService.updateProduct(values);
+            if (savedProductResponse.id) {
+                props.closeModelCallback();
+                setLoading(false);
+            }
+        } catch (err) {
+            setDisplayAlert({
+                type: 'error',
+                message: err.response.data.message,
+                visible: true
+            });
+            setLoading(false);
+        }
+    }
+
+    const onFinish = async (values) => {
+        let token = await ReactRecaptcha3.getToken().then((token) => token);
+        values.token = token;
+        if (props.modalName === "Edit") {
+            update(values);
+        } else {
+            save(values);
+        }
 
     };
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
     };
 
     const normFile = (e) => {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -113,28 +172,24 @@ const ProductForm = (props) => {
                 ]}>
                 <Input />
             </Form.Item>
-
             <Form.Item label="Image"
                 name="image"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
                 extra="max 2048MB"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input your !',
-                    },
-                ]}
             >
-
-                <Upload
+                <Upload {...fileList}
                     listType="picture"
                     accept="image/png, image/jpeg"
-                    maxCount={1}
                     beforeUpload={() => false}
+                    maxCount={1}
+                    onChange={(data) => {
+                        handleUpload(data)
+                    }}
                 >
                     <Button icon={<UploadOutlined />}>Upload</Button>
                 </Upload>
+
             </Form.Item>
             <Image
                 width={200}
@@ -146,7 +201,7 @@ const ProductForm = (props) => {
                 </Button>
             </Form.Item>
 
-        </Form>
+        </Form >
     );
 };
 export default ProductForm;

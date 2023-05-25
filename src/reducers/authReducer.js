@@ -69,8 +69,6 @@ const checkAuthentication = () => {
     return async (dispatch) => {
         try {
             const authToken = Cookies.get("authToken");
-            console.log(authToken);
-
             if (authToken) {
                 // fetch the user with the token
                 const userResponse = await webService.call('get', `check-login`, {}, {
@@ -95,14 +93,10 @@ const checkAuthentication = () => {
 
 const loginUser = (values) => {
 
-    console.log(values);
-
     return async (dispatch) => {
         try {
             // login user with the username
             const loginResponse = await loginService.login(values);
-
-            console.log(loginResponse);
 
             Cookies.set('authToken', loginResponse.token);
             dispatch(authSuccess(loginResponse.user));

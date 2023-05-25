@@ -28,7 +28,6 @@ const ProductList = (props) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const openProductModal = (record) => {
-    console.log(record);
   }
 
   const columns = [

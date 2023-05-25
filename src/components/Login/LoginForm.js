@@ -31,7 +31,6 @@ const LoginForm = () => {
             dispatch(loginUser(values));
 
         } catch (err) {
-            console.log(err);
             setDisplayAlert({
                 type: 'error',
                 message: err.response.data.message,

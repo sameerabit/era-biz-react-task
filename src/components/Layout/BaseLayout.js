@@ -15,7 +15,6 @@ const BaseLayout = (props) => {
     const { children } = props;
 
     const { authenticated } = props;
-    console.log('authenticated: ', authenticated)
 
     const dispatch = useDispatch();
 

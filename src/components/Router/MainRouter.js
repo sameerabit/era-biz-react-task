@@ -13,8 +13,6 @@ import Register from '../Register/Register';
 
 const MainRouter = (props) => {
     const { authenticated } = props;
-    console.log('authenticated: ', authenticated)
-
     const dispatch = useDispatch();
 
     useEffect(() => {
