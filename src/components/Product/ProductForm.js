@@ -1,11 +1,9 @@
 import React from 'react';
 import './index.css';
-import { PlusOutlined } from '@ant-design/icons';
 import {
     Form,
     Input,
     Button,
-    message,
     Upload,
     Alert,
     Image
@@ -24,14 +22,8 @@ const ProductForm = (props) => {
         message: null,
         visible: false
     });
-    const [product, setProduct] = useState({
-        id: null,
-        name: null,
-        description: null,
-        price: null
-    })
 
-    if (props.modalName == "Edit") {
+    if (props.modalName === "Edit") {
         useEffect(() => {
             form.setFieldsValue(props.product);
             productService.getProductImage(props.product.id).then((data) => {

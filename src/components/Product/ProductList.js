@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Table, Tag } from 'antd';
+import { Table } from 'antd';
 
 import { Layout, Space } from 'antd';
 
@@ -76,6 +75,7 @@ const ProductList = (props) => {
   }
 
   return (
+
     <Space style={{ width: '100%', justifyContent: 'left' }}>
       <Content style={contentStyle}>
 

@@ -1,7 +1,5 @@
-import axios from "axios";
 import Cookies from "js-cookie";
 import { loginService } from "../services/loginService";
-import { BACKEND_URL } from "../constants";
 import { webService } from "../services/webService";
 
 const initialState = {
@@ -114,41 +112,52 @@ const loginUser = (values) => {
     }
 }
 
-// const logoutUser = (username) => {
-//     return async (dispatch) => {
-//         try {
-//             // logout user with the username
-//             await axios.post(`${BACKEND_URL}/auth/logout`, {
-//                 username
-//             });
+const registerUser = (values) => {
 
-//             Cookies.remove('authToken');
-//             dispatch(authStatus(false, null));
-//         } catch (error) {
-//             Cookies.remove('authToken');
-//             dispatch(authStatus(false, null));
-//         }
-//     }
-// }
+    return async (dispatch) => {
+        try {
+            // login user with the username
+            const registerResponse = await loginService.register(values);
 
-// const authenticationError = (username) => {
-//     return async (dispatch) => {
-//         try {
-//             alert(`Authentication error with the user: ${username}`);
+            Cookies.set('authToken', registerResponse.token);
+            dispatch(authSuccess(registerResponse.user));
+        } catch (error) {
+            dispatch(authFailure());
+        }
+    }
+}
 
-//             dispatch(logoutUser(username));
-//         } catch (error) {
-//             Cookies.remove('authToken');
-//             dispatch(authStatus(false, null));
-//         }
-//     }
-// }
+const logoutUser = () => {
+    return async (dispatch) => {
+        try {
+            loginService.logout();
+            Cookies.remove('authToken');
+            dispatch(authStatus(false, null));
+        } catch (error) {
+            dispatch(authFailure());
+        }
+    }
+}
+
+const authenticationError = (username) => {
+    return async (dispatch) => {
+        try {
+            alert(`Authentication error with the user: ${username}`);
+
+            dispatch(logoutUser(username));
+        } catch (error) {
+            Cookies.remove('authToken');
+            dispatch(authStatus(false, null));
+        }
+    }
+}
 
 export {
     authReducer,
     checkAuthentication,
     loginUser,
-    // logoutUser,
+    registerUser,
+    logoutUser,
     changeFavourites,
-    // authenticationError
+    authenticationError
 };

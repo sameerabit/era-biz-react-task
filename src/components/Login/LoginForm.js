@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import './index.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 import { Layout, Space, Alert } from 'antd';
 
 import { Typography } from 'antd';
-import { loginService } from '../../services/loginService';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../reducers/authReducer';
 
 const { Title } = Typography;
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 
 const contentStyle = {
     textAlign: 'center',
@@ -29,8 +28,6 @@ const LoginForm = () => {
 
     const onFinish = async (values) => {
         try {
-            // let x = await loginService.login(values);
-
             dispatch(loginUser(values));
 
         } catch (err) {
@@ -85,7 +82,7 @@ const LoginForm = () => {
                             <Button size="large" type="primary" htmlType="submit" className="login-form-button">
                                 Log in
                             </Button>
-                            Or <a href="">register now!</a>
+                            Or <a href="/register">register now!</a>
                         </Form.Item>
                     </Form>
 

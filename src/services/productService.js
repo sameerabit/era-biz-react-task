@@ -1,5 +1,4 @@
 import { webService } from './webService';
-import { BACKEND_URL } from "../constants";
 import Cookies from "js-cookie";
 
 
