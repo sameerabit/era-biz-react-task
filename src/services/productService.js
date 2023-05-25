@@ -49,15 +49,15 @@ export const productService = {
         );
     },
 
-    getAll: (page) => {
+    getAll: (page, filters) => {
         // use constant for configs
-
+        let query = filters ? '&' + filters.field + '=' + filters.value : '';
         let header = {
             'Authorization': 'Bearer ' + Cookies.get("authToken")
         }
         return webService.call(
             'get',
-            'products?page=' + page,
+            `products?page=${page}${query}`,
             {},
             header
         );
@@ -70,7 +70,20 @@ export const productService = {
         }
         return webService.call(
             'get',
-            `products/${id}/image`,
+            `products / ${id} / image`,
+            {},
+            header
+        );
+    },
+
+    deleteProduct: (id) => {
+
+        let header = {
+            'Authorization': 'Bearer ' + Cookies.get("authToken")
+        }
+        return webService.call(
+            'delete',
+            `products / ${id}`,
             {},
             header
         );

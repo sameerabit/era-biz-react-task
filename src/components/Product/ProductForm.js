@@ -32,7 +32,7 @@ const ProductForm = (props) => {
         useEffect(() => {
             form.setFieldsValue(props.product);
             productService.getProductImage(props.product.id).then((data) => {
-                setImageSrc(data);
+                setImageSrc(props.product.image_url);
             });
         }, []);
     }
@@ -191,12 +191,19 @@ const ProductForm = (props) => {
                 </Upload>
 
             </Form.Item>
-            <Image
-                width={200}
-                src={imageSrc}
-            />
+            <>{
+                props.modalName === 'Edit' ? <Image
+                    style={{
+                        marginLeft: 100,
+                    }}
+                    width={200}
+                    height={200}
+                    src={imageSrc}
+                /> : ''
+            }</>
+
             <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading}>
+                <Button type="primary" size='large' htmlType="submit" loading={loading}>
                     Save
                 </Button>
             </Form.Item>
